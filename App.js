@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,15 +20,15 @@ export default function App() {
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
-            if (route.name === 'Accueil') {
+            if (route.name === 'Home') {
               iconName = focused
                 ? 'home'
                 : 'home-outline';
-            } else if (route.name === 'Connexion') {
+            } else if (route.name === 'Login') {
               iconName = focused ? 'log-in' : 'log-in-outline';
-            } else if (route.name === 'Inscription') {
+            } else if (route.name === 'Register') {
               iconName = focused ? 'person-add' : 'person-add-outline';
-            } else if (route.name === 'Profil') {
+            } else if (route.name === 'Profile') {
               iconName = focused ? 'person' : 'person-outline';
             }
 
@@ -40,9 +39,9 @@ export default function App() {
           tabBarInactiveTintColor: 'gray',
         })}
       >
-        <Tab.Screen name="Accueil" component={HomeScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen
-          name="Profil"
+          name="Profile"
           component={ProfileScreen}
           initialParams={{
             avatar: "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png",
@@ -52,8 +51,8 @@ export default function App() {
             metier: "Développeur"
           }}
         />
-        <Tab.Screen name="Connexion" component={LoginScreen} />
-        <Tab.Screen name="Inscription" component={RegisterScreen} />
+        <Tab.Screen name="Login" component={LoginScreen} />
+        <Tab.Screen name="Register" component={RegisterScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
