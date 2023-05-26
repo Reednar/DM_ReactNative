@@ -22,9 +22,23 @@ export default function PokedexScreen({ navigation }) {
     const fetchPokemon = async () => {
       try {
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=30`);
-        setPokemons(response.data);
+        const pokemonList = response.data.results;
+
+        const pokemonPromises = pokemonList.map(async (pokemon) => {
+          const pokemonInfos = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon.url.split('/')[6]}`);
+          return pokemonInfos.data;
+        });
+
+        const pokemonData = await Promise.all(pokemonPromises);
+
+        const updatePokemons = {
+          ...response.data,
+          results: pokemonData,
+        };
+
+        setPokemons(updatePokemons);
       } catch (error) {
-        console.log('[error] fetchPokemon', error);
+        console.log(error);
       }
     }
     fetchPokemon();
@@ -50,13 +64,25 @@ export default function PokedexScreen({ navigation }) {
               <View style={styles.modalContent}>
                 <Image
                   style={styles.pokemonImage}
-                  source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${selectedPokemon.url.split('/')[6]}.png` }}
+                  source={{ uri: selectedPokemon.sprites.other['official-artwork'].front_default }}
                 />
                 <Image
                   style={styles.pokemonImage}
-                  source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${selectedPokemon.url.split('/')[6]}.png` }}
+                  source={{ uri: selectedPokemon.sprites.other['official-artwork'].front_shiny }}
                 />
               </View>
+              <Text style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>
+                Types : {selectedPokemon.types.map((type) => type.type.name).join(', ')}
+              </Text>
+              <Text style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>
+                Abilities : {selectedPokemon.abilities.map((ability) => ability.ability.name).join(', ')}
+              </Text>
+              <Text style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>
+                Height : {selectedPokemon.height}
+              </Text>
+              <Text style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>
+                Weight : {selectedPokemon.weight}
+              </Text>
               <Button title="Fermer" onPress={closeModal} />
             </View>
           </View>
@@ -73,11 +99,11 @@ export default function PokedexScreen({ navigation }) {
               <View style={styles.pokemonImagesContainer}>
                 <Image
                   style={styles.pokemonImage}
-                  source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${item.url.split('/')[6]}.png` }}
+                  source={{ uri: item.sprites.other['official-artwork'].front_default }}
                 />
                 <Image
                   style={styles.pokemonImage}
-                  source={{ uri: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${item.url.split('/')[6]}.png` }}
+                  source={{ uri: item.sprites.other['official-artwork'].front_shiny }}
                 />
               </View>
             </TouchableOpacity>

@@ -85,25 +85,24 @@ export default function HomeScreen({ navigation }) {
       <ScrollView>
         <View style={isDarkMode ? styles.darkContainer : styles.lightContainer}>
           {data && data.results && data.results.map((character, index) => (
-            <>
-              <Text key={index} style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>{character.name}</Text>
+            <View key={index}>
+              <Text style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>{character.name}</Text>
               <Image
                 style={{ width: 64, height: 64, borderRadius: 32 }}
                 source={{ uri: character.image }}
               />
-            </>
+            </View>
           ))}
           {data2 && data2.collection && data2.collection.items && data2.collection.items.map((item, index) => (
-            <>
-              <Text key={index} style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>{item.data[0].title}</Text>
+            <View key={index}>
+              <Text style={isDarkMode ? { color: '#fff' } : { color: '#000' }}>{item.data[0].title}</Text>
               {item.links && item.links.map((link, index) => (
                 <Image
-                  key={index}
                   style={{ width: 200, height: 200, borderRadius: 32 }}
                   source={{ uri: link.href }}
                 />
               ))}
-            </>
+            </View>
           ))}
         </View>
       </ScrollView>
